@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
 import classNames from 'classnames';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
+import { withRouter } from "react-router-dom";
+
 
 
 class Register extends Component {
@@ -24,6 +25,17 @@ class Register extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log('Will receive pprops ', nextProps);
+
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            })
+
+        }
+    }
+
     onSubmit(e) {
         e.preventDefault();
 
@@ -35,11 +47,9 @@ class Register extends Component {
         }
         console.log(newUser);
 
-        // *** Pass data to reducer
-        this.props.registerUser(newUser);
-        // Axios.post('/api/users/register', newUser)
-        //     .then(res => console.log(res.data))
-        //     .catch(err => this.setState({ errors: err.response.data }))
+        // *  〰️〰️〰️〰️〰️〰️  REDUX  〰️〰️〰️〰️〰️〰️〰️
+        // *  〰️〰️〰️〰️ TRIGGER ACTION  〰️〰️〰️〰️〰️〰️〰️
+        this.props.registerUser(newUser, this.props.history);
 
     }
 
@@ -117,44 +127,23 @@ class Register extends Component {
 }
 
 
-/* * ------------------------------------------------
-*           [ STEP ONE ]
-*            DISPATCHER
-* This has the state blue print and action
-*---------------------------------------------------/*/
-
-/*
-export const registerUser = (userData) => {
-    return {
-        type: TEST_DISPATCH,
-        payload: userData
-    }
-}
+/* *
+*  〰️〰️〰️〰️〰️〰️  REDUX  〰️〰️〰️〰️〰️〰️〰️
 */
 
-
-/* * ------------------------------------------------
-*           [ STEP TWO ]
-*      TRIGGER THE DISPATCHER
-*---------------------------------------------------/*/
-
-/*
- this.props.registerUser(newUser);
-*/
-
-
-// 1. - null
-// 2 - registerUser =>
-
+// Define required data 
 Register.protoTypes = {
     registerUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
 }
 
+// Grab data from the store
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.auth,
+    errors: state.errors
 })
 
-
-export default connect(mapStateToProps, { registerUser })(Register);
+// MapStateToProps // Action -> RootReducer // Class Name
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
 
