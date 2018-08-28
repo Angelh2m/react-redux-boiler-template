@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
 import { withRouter } from "react-router-dom";
+import TextFieldGroup from '../common/TextFieldGroup';
 
 
 
@@ -61,7 +61,6 @@ class Register extends Component {
 
     render() {
         const { errors } = this.state;
-        const defaultStyle = 'form-control form-control-lg';
         const { user } = this.props.auth;
 
         return (
@@ -70,55 +69,45 @@ class Register extends Component {
                 <div className="register">
                     <div className="container">
                         <div className="row">
-                            {console.log(errors)}
                             <div className="col-md-8 m-auto">
                                 <h1 className="display-4 text-center">Sign Up</h1>
                                 <p className="lead text-center">Create your DevConnector account</p>
                                 <form onSubmit={this.onSubmit}>
-                                    <div className="form-group">
-                                        <input type="text"
-                                            className={classNames(defaultStyle, { 'is-invalid': errors.name })}
-                                            placeholder="Name"
-                                            value={this.state.name}
-                                            onChange={this.onChange}
-                                            name="name" />
-                                    </div>
-                                    {errors.name && (<div className="invalid">{errors.name}</div>)}
 
-                                    <div className="form-group">
-                                        <input type="email"
-                                            className={classNames(defaultStyle, { 'is-invalid': errors.email })}
+                                    <TextFieldGroup
+                                        name='name'
+                                        placeholder='Name'
+                                        value={this.state.name}
+                                        error={errors.name}
+                                        onChange={this.onChange}
+                                    />
 
-                                            placeholder="Email Address"
-                                            value={this.state.email}
-                                            onChange={this.onChange}
-                                            name="email" />
-                                        <small className="form-text text-muted">This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
-                                    </div>
-                                    {errors.email && (<div className="invalid">{errors.email}</div>)}
+                                    <TextFieldGroup
+                                        name='email'
+                                        placeholder='Email address'
+                                        type="email"
+                                        value={this.state.email}
+                                        error={errors.email}
+                                        onChange={this.onChange}
+                                    />
 
-                                    <div className="form-group">
-                                        <input type="password"
-                                            className={classNames(defaultStyle, { 'is-invalid': errors.password })}
+                                    <TextFieldGroup
+                                        name='password'
+                                        type='password'
+                                        placeholder='Password'
+                                        value={this.state.password}
+                                        error={errors.password}
+                                        onChange={this.onChange}
+                                    />
 
-                                            placeholder="Password"
-                                            value={this.state.password}
-                                            onChange={this.onChange}
-                                            name="password" />
-                                    </div>
-                                    {errors.password && (<div className="invalid">{errors.password}</div>)}
-
-
-                                    <div className="form-group">
-                                        <input type="password"
-                                            className={classNames(defaultStyle, { 'is-invalid': errors.password2 })}
-
-                                            placeholder="Confirm Password"
-                                            value={this.state.password2}
-                                            onChange={this.onChange}
-                                            name="password2" />
-                                    </div>
-                                    {errors.password2 && (<div className="invalid">{errors.password2}</div>)}
+                                    <TextFieldGroup
+                                        name='password2'
+                                        type='password'
+                                        placeholder='Confirm password'
+                                        value={this.state.password2}
+                                        error={errors.password2}
+                                        onChange={this.onChange}
+                                    />
 
 
                                     <input type="submit" className="btn btn-info btn-block mt-4" />

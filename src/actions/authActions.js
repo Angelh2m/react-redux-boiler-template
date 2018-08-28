@@ -31,7 +31,6 @@ export const loginUser = (userData) => (dispatch) => {
             setAuthToken(token);
             // Decode Token to get user data
             const decoded = jwt_decode(token);
-            console.log(decoded);
             // Set current user
 
             dispatch(setCurrentUser(decoded))
@@ -52,11 +51,12 @@ export const setCurrentUser = (decoded) => {
     }
 }
 
-export const logoutUser = () => (dispatch) => {
+export const logoutUser = (history) => (dispatch) => {
     // Remove token from local storage
     localStorage.removeItem('jwtToken');
     // Remove the header from future request
     setAuthToken(false);
     // Set the current user to empty object and isAuthenticated to FALSE
     dispatch(setCurrentUser, {})
+    window.location.href = '/';
 }
