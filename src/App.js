@@ -14,10 +14,12 @@ import { Landing } from './layout/Landing';
 import Footer from './layout/Footer';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import Dashboard from './components/dashboard/Dashboard';
 // Veryfy token
 import jwt_decode from 'jwt-decode';
 import { setAuthToken } from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
+import { clearCurrentProfile } from './actions/profileActions';
 
 //
 
@@ -36,7 +38,7 @@ if (localStorage.jwtToken) {
     // Logout User
     store.dispatch(logoutUser());
     //Clear current profile
-    // @TODO
+    store.dispatch(clearCurrentProfile());
     // redirect User
     window.location.href = '/login';
   }
@@ -58,6 +60,7 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/dashboard" component={Dashboard} />
             </div>
 
             <Footer />
