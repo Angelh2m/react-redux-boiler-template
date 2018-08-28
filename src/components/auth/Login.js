@@ -1,12 +1,21 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions/authActions';
+import classNames from 'classnames';
 
-export class Login extends Component {
+
+
+class Login extends Component {
 
     constructor() {
         super();
         this.state = {
             email: '',
             password: '',
+            errors: {
+
+            }
         }
 
         this.onChange = this.onChange.bind(this);
@@ -17,20 +26,44 @@ export class Login extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push('/dashboard');
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps.auth);
+
+        if (nextProps.auth.isAuthenticated) {
+            console.warn('Authenticated now redirect');
+
+            this.props.history.push('/dashboard');
+        }
+        if (nextProps.errors) {
+            this.setState({ errors: nextProps.errors })
+        }
+    }
+
     onSubmit(e) {
         e.preventDefault();
 
         const userLogin = {
-            name: this.state.name,
             email: this.state.email,
             password: this.state.password,
-            password2: this.state.password2,
         }
-        console.log(userLogin);
+
+        // *  〰️〰️〰️〰️〰️〰️  REDUX  〰️〰️〰️〰️〰️〰️〰️
+        // *  〰️〰️〰️〰️ TRIGGER ACTION  〰️〰️〰️〰️〰️〰️〰️
+        this.props.loginUser(userLogin);
 
     }
 
     render() {
+
+        const { errors } = this.state;
+        const defaultStyle = 'form-control form-control-lg';
+
         return (
             <div>
                 <div className="login">
@@ -42,28 +75,47 @@ export class Login extends Component {
                                 <form onSubmit={this.onSubmit}>
                                     <div className="form-group">
                                         <input type="email"
-                                            className="form-control form-control-lg"
+                                            className={classNames(defaultStyle, { 'is-invalid': errors.email })}
                                             placeholder="Email Address"
                                             value={this.state.email}
                                             onChange={this.onChange}
                                             name="email" />
                                     </div>
+                                    {errors.email && (<div className="invalid">{errors.email}</div>)}
+
                                     <div className="form-group">
                                         <input type="password"
-                                            className="form-control form-control-lg"
+                                            className={classNames(defaultStyle, { 'is-invalid': errors.password })}
                                             placeholder="Password"
                                             value={this.state.password}
                                             onChange={this.onChange}
                                             name="password" />
                                     </div>
+                                    {errors.password && (<div className="invalid">{errors.password}</div>)}
                                     <input type="submit" className="btn btn-info btn-block mt-4" />
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }
 }
+
+
+// Define required data 
+Login.propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired,
+}
+
+// Grab data from the store
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    errors: state.errors
+})
+
+
+export default connect(mapStateToProps, { loginUser })(Login);
