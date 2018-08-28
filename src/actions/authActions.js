@@ -57,6 +57,6 @@ export const logoutUser = (history) => (dispatch) => {
     // Remove the header from future request
     setAuthToken(false);
     // Set the current user to empty object and isAuthenticated to FALSE
-    dispatch(setCurrentUser, {})
-    window.location.href = '/';
+    dispatch(setCurrentUser({}));
+    // window.location.href = '/';
 }
