@@ -6,6 +6,7 @@ import { Spinner } from '../common/Spinner';
 import { Link } from 'react-router-dom';
 
 
+
 class Dashboard extends Component {
     componentDidMount() {
         this.props.getCurrentProfile();
@@ -20,7 +21,13 @@ class Dashboard extends Component {
         } else {
             //Check if logged user has profile data
             if (Object.keys(profile).length > 0) {
-                dashboardContent = <h4>TODO: DISPLAY PROFILE</h4>
+                dashboardContent = (
+                    <div>
+                        <p className="lead text-muted">
+                            <Link to={`/profile/${profile.handle}`}> Welcome {user.name}  </Link>
+                        </p>
+                    </div>
+                )
             } else {
                 //User logged in but has no profile
                 dashboardContent = (
